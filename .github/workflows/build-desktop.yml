@@ -1,0 +1,22 @@
+name: build-desktop
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: dtolnay/rust-toolchain@stable
+      - run: npm install
+      - uses: tauri-apps/tauri-action@v0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cheque-scanner-windows
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
